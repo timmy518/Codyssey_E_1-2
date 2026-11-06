@@ -3,13 +3,23 @@
 메뉴 표시와 입력 처리를 담당한다.
 """
 
+from default_quizzes import get_default_quizzes
+from quiz import Quiz
+
 LINE = "=" * 40
 
 
 class QuizGame:
-    """퀴즈 게임 전체를 관리한다."""
+    """퀴즈 게임 전체를 관리한다.
+
+    속성(attribute):
+        quizzes: 퀴즈 목록 (list[Quiz])
+    """
 
     MENU = ("퀴즈 풀기", "퀴즈 추가", "퀴즈 목록", "점수 확인", "종료")
+
+    def __init__(self) -> None:
+        self.quizzes: list[Quiz] = get_default_quizzes()
 
     # ------------------------------------------------------------------
     # 실행 흐름
