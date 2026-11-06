@@ -1,0 +1,14 @@
+# Python 캐시 / 가상환경
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 실행하면 생기는 데이터 파일
+state.json
+
+# OS / 에디터 설정
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
