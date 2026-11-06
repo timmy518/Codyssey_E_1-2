@@ -24,6 +24,7 @@ class QuizGame:
     """
 
     MENU = ("퀴즈 풀기", "퀴즈 추가", "퀴즈 목록", "점수 확인", "종료")
+    HINT_PENALTY = 0.5  # 힌트를 본 문제는 맞혀도 1점에서 0.5점을 뺀다.
 
     def __init__(self, state_path) -> None:
         self.state_path = Path(state_path)
@@ -125,28 +126,42 @@ class QuizGame:
 
         print(f"\n퀴즈를 시작합니다! (총 {count}문제)")
         correct_count = 0
+        points = 0.0
         for number, quiz in enumerate(selected, start=1):
             print()
             print(THIN_LINE)
             quiz.display(number)
             print()
-            user_answer = self.ask_answer()
+            user_answer, used_hint = self.ask_answer(quiz)
             if quiz.is_correct(user_answer):
                 correct_count += 1
+                if used_hint:
+                    points += 1 - self.HINT_PENALTY
+                else:
+                    points += 1
                 print("정답입니다!")
             else:
                 print("오답입니다.")
 
-        score = int(correct_count * 100 / count)  # 100점 만점, 소수점 아래는 버린다.
+        score = int(points * 100 / count)  # 100점 만점, 소수점 아래는 버린다.
         self.finish_game(count, correct_count, score)
 
-    def ask_answer(self) -> int:
-        """정답 번호를 입력받는다."""
+    def ask_answer(self, quiz: Quiz) -> tuple[int, bool]:
+        """정답 번호를 입력받는다. 힌트가 있는 문제에서 h 를 입력하면 힌트를 보여 준다.
+
+        돌려주는 값: (입력한 번호, 힌트를 봤는지 여부)
+        """
+        used_hint = False
+        prompt = "정답 입력 (힌트: h): " if quiz.has_hint() else "정답 입력: "
         while True:
-            text = input("정답 입력: ").strip()
+            text = input(prompt).strip()
+            if quiz.has_hint() and text.lower() == "h":
+                used_hint = True
+                print(f"힌트: {quiz.hint}")
+                continue
             number = self.parse_number(text, 1, Quiz.CHOICE_COUNT)
             if number is not None:
-                return number
+                return number, used_hint
 
     def finish_game(self, total: int, correct: int, score: int) -> None:
         """결과를 보여 주고, 최고 점수를 갱신해 저장한다."""
@@ -169,15 +184,16 @@ class QuizGame:
     # 2. 퀴즈 추가
     # ------------------------------------------------------------------
     def add_quiz(self) -> None:
-        """문제, 선택지 4개, 정답 번호를 입력받아 새 퀴즈를 등록하고 저장한다."""
+        """문제, 선택지 4개, 정답 번호, 힌트를 입력받아 새 퀴즈를 등록하고 저장한다."""
         print("\n새로운 퀴즈를 추가합니다.")
         question = self.ask_text("문제를 입력하세요: ")
         choices = []
         for number in range(1, Quiz.CHOICE_COUNT + 1):
             choices.append(self.ask_text(f"선택지 {number}: "))
         answer = self.ask_number(f"정답 번호 (1-{Quiz.CHOICE_COUNT}): ", 1, Quiz.CHOICE_COUNT)
+        hint = input("힌트 (없으면 Enter): ").strip()
 
-        self.quizzes.append(Quiz(question, choices, answer))
+        self.quizzes.append(Quiz(question, choices, answer, hint))
         self.save_data()
         print("\n퀴즈가 추가되었습니다!")
 
