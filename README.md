@@ -266,6 +266,14 @@ python -m unittest discover -s tests -v
 
 병합할 때 `git merge --no-ff` 를 사용해 병합 기록이 `git log --oneline --graph` 에 남도록 했습니다.
 
+### clone / pull 실습
+
+1. 이 저장소를 다른 폴더에 `git clone` 했습니다.
+2. 복제한 폴더에서 README 에 아래 한 줄을 추가하고 `commit` → `push` 했습니다.
+3. 원래 작업 폴더에서 `git pull` 로 그 변경을 가져와 반영된 것을 확인했습니다.
+
+> 이 문장은 clone 한 폴더에서 추가해 push 한 뒤, 원래 작업 폴더에서 `git pull` 로 받아 온 줄입니다.
+
 ## 13. 실행 화면
 
 | 메뉴 | 퀴즈 풀기 |
