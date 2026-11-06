@@ -1,6 +1,6 @@
 """퀴즈 게임 전체를 관리하는 QuizGame 클래스.
 
-메뉴 표시, 퀴즈 풀기/추가/목록, 점수 확인, 입력 처리, 파일 저장/불러오기를 담당한다.
+메뉴 표시, 퀴즈 풀기/추가/목록/삭제, 점수 확인, 입력 처리, 파일 저장/불러오기를 담당한다.
 """
 
 import json
@@ -23,7 +23,7 @@ class QuizGame:
         best_score: 최고 점수 (아직 풀지 않았으면 None)
     """
 
-    MENU = ("퀴즈 풀기", "퀴즈 추가", "퀴즈 목록", "점수 확인", "종료")
+    MENU = ("퀴즈 풀기", "퀴즈 추가", "퀴즈 목록", "점수 확인", "퀴즈 삭제", "종료")
     HINT_PENALTY = 0.5  # 힌트를 본 문제는 맞혀도 1점에서 0.5점을 뺀다.
 
     def __init__(self, state_path) -> None:
@@ -52,6 +52,8 @@ class QuizGame:
                     self.list_quizzes()
                 elif choice == 4:
                     self.show_score()
+                elif choice == 5:
+                    self.delete_quiz()
                 else:
                     self.quit()
                     break
@@ -221,6 +223,21 @@ class QuizGame:
             print("\n아직 퀴즈를 풀지 않았습니다. 먼저 퀴즈를 풀어 보세요.")
             return
         print(f"\n최고 점수: {self.best_score}점")
+
+    # ------------------------------------------------------------------
+    # 5. 퀴즈 삭제
+    # ------------------------------------------------------------------
+    def delete_quiz(self) -> None:
+        """번호를 골라 퀴즈를 삭제하고 파일에 반영한다."""
+        if not self.quizzes:
+            print("\n삭제할 퀴즈가 없습니다.")
+            return
+        self.list_quizzes()
+        total = len(self.quizzes)
+        number = self.ask_number(f"\n삭제할 퀴즈 번호 (1-{total}): ", 1, total)
+        removed = self.quizzes.pop(number - 1)
+        self.save_data()
+        print(f"\n퀴즈를 삭제했습니다: {removed.question}")
 
     # ------------------------------------------------------------------
     # 파일 저장 / 불러오기
