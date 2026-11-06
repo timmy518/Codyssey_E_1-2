@@ -1,6 +1,6 @@
 """퀴즈 게임 전체를 관리하는 QuizGame 클래스.
 
-메뉴 표시, 퀴즈 풀기, 입력 처리를 담당한다.
+메뉴 표시, 퀴즈 풀기/추가, 입력 처리를 담당한다.
 """
 
 import random
@@ -90,6 +90,14 @@ class QuizGame:
             if number is not None:
                 return number
 
+    def ask_text(self, prompt: str) -> str:
+        """빈 값이 아닌 글자를 입력받는다. 빈 입력이면 안내 후 다시 입력받는다."""
+        while True:
+            text = input(prompt).strip()
+            if text != "":
+                return text
+            print("입력값이 없습니다. 내용을 입력하세요.")
+
     # ------------------------------------------------------------------
     # 1. 퀴즈 풀기
     # ------------------------------------------------------------------
@@ -124,11 +132,23 @@ class QuizGame:
         print(LINE)
 
     # ------------------------------------------------------------------
-    # 아직 만들지 않은 메뉴 (준비 중 안내)
+    # 2. 퀴즈 추가
     # ------------------------------------------------------------------
     def add_quiz(self) -> None:
-        print("\n준비 중인 기능입니다.")
+        """문제, 선택지 4개, 정답 번호를 입력받아 새 퀴즈를 등록한다."""
+        print("\n새로운 퀴즈를 추가합니다.")
+        question = self.ask_text("문제를 입력하세요: ")
+        choices = []
+        for number in range(1, Quiz.CHOICE_COUNT + 1):
+            choices.append(self.ask_text(f"선택지 {number}: "))
+        answer = self.ask_number(f"정답 번호 (1-{Quiz.CHOICE_COUNT}): ", 1, Quiz.CHOICE_COUNT)
 
+        self.quizzes.append(Quiz(question, choices, answer))
+        print("\n퀴즈가 추가되었습니다!")
+
+    # ------------------------------------------------------------------
+    # 아직 만들지 않은 메뉴 (준비 중 안내)
+    # ------------------------------------------------------------------
     def list_quizzes(self) -> None:
         print("\n준비 중인 기능입니다.")
 
