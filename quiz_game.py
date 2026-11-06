@@ -104,7 +104,7 @@ class QuizGame:
     # 1. 퀴즈 풀기
     # ------------------------------------------------------------------
     def play(self) -> None:
-        """풀 문제 수를 고르게 한 뒤 퀴즈를 랜덤 순서로 출제하고, 결과를 보여 준다."""
+        """풀 문제 수를 고르게 한 뒤 퀴즈를 랜덤 순서로 출제하고, 결과를 처리한다."""
         if not self.quizzes:
             print("\n등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가해 주세요.")
             return
@@ -120,7 +120,7 @@ class QuizGame:
             print(THIN_LINE)
             quiz.display(number)
             print()
-            user_answer = self.ask_number("정답 입력: ", 1, Quiz.CHOICE_COUNT)
+            user_answer = self.ask_answer()
             if quiz.is_correct(user_answer):
                 correct_count += 1
                 print("정답입니다!")
@@ -128,9 +128,21 @@ class QuizGame:
                 print("오답입니다.")
 
         score = int(correct_count * 100 / count)  # 100점 만점, 소수점 아래는 버린다.
+        self.finish_game(count, correct_count, score)
+
+    def ask_answer(self) -> int:
+        """정답 번호를 입력받는다."""
+        while True:
+            text = input("정답 입력: ").strip()
+            number = self.parse_number(text, 1, Quiz.CHOICE_COUNT)
+            if number is not None:
+                return number
+
+    def finish_game(self, total: int, correct: int, score: int) -> None:
+        """결과를 보여 주고, 최고 점수를 갱신한다."""
         print()
         print(LINE)
-        print(f"결과: {count}문제 중 {correct_count}문제 정답! ({score}점)")
+        print(f"결과: {total}문제 중 {correct}문제 정답! ({score}점)")
         if self.update_best_score(score):
             print("새로운 최고 점수입니다!")
         print(LINE)
