@@ -1,6 +1,6 @@
 """퀴즈 게임 전체를 관리하는 QuizGame 클래스.
 
-메뉴 표시, 퀴즈 풀기/추가/목록, 입력 처리를 담당한다.
+메뉴 표시, 퀴즈 풀기/추가/목록, 점수 확인, 입력 처리를 담당한다.
 """
 
 import random
@@ -17,12 +17,14 @@ class QuizGame:
 
     속성(attribute):
         quizzes: 퀴즈 목록 (list[Quiz])
+        best_score: 최고 점수 (아직 풀지 않았으면 None)
     """
 
     MENU = ("퀴즈 풀기", "퀴즈 추가", "퀴즈 목록", "점수 확인", "종료")
 
     def __init__(self) -> None:
         self.quizzes: list[Quiz] = get_default_quizzes()
+        self.best_score: int | None = None
 
     # ------------------------------------------------------------------
     # 실행 흐름
@@ -129,7 +131,16 @@ class QuizGame:
         print()
         print(LINE)
         print(f"결과: {count}문제 중 {correct_count}문제 정답! ({score}점)")
+        if self.update_best_score(score):
+            print("새로운 최고 점수입니다!")
         print(LINE)
+
+    def update_best_score(self, score: int) -> bool:
+        """점수를 최고 점수와 비교해 더 높으면 갱신한다. 갱신했으면 True."""
+        if self.best_score is None or score > self.best_score:
+            self.best_score = score
+            return True
+        return False
 
     # ------------------------------------------------------------------
     # 2. 퀴즈 추가
@@ -162,7 +173,11 @@ class QuizGame:
         print(THIN_LINE)
 
     # ------------------------------------------------------------------
-    # 아직 만들지 않은 메뉴 (준비 중 안내)
+    # 4. 점수 확인
     # ------------------------------------------------------------------
     def show_score(self) -> None:
-        print("\n준비 중인 기능입니다.")
+        """최고 점수를 보여 준다."""
+        if self.best_score is None:
+            print("\n아직 퀴즈를 풀지 않았습니다. 먼저 퀴즈를 풀어 보세요.")
+            return
+        print(f"\n최고 점수: {self.best_score}점")
