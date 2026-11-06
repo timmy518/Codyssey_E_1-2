@@ -1,11 +1,56 @@
 """퀴즈 게임 전체를 관리하는 QuizGame 클래스.
 
-입력 처리를 담당한다.
+메뉴 표시와 입력 처리를 담당한다.
 """
+
+LINE = "=" * 40
 
 
 class QuizGame:
     """퀴즈 게임 전체를 관리한다."""
+
+    MENU = ("퀴즈 풀기", "퀴즈 추가", "퀴즈 목록", "점수 확인", "종료")
+
+    # ------------------------------------------------------------------
+    # 실행 흐름
+    # ------------------------------------------------------------------
+    def run(self) -> None:
+        """프로그램의 시작점. 종료를 고를 때까지 메뉴를 반복한다."""
+        try:
+            self.show_title()
+            while True:
+                self.show_menu()
+                choice = self.ask_number("선택: ", 1, len(self.MENU))
+                if choice == 1:
+                    self.play()
+                elif choice == 2:
+                    self.add_quiz()
+                elif choice == 3:
+                    self.list_quizzes()
+                elif choice == 4:
+                    self.show_score()
+                else:
+                    self.quit()
+                    break
+        except (KeyboardInterrupt, EOFError):
+            # Ctrl+C 또는 입력 스트림 종료 시 오류 화면 없이 끝낸다.
+            print("\n\n입력이 중단되어 프로그램을 종료합니다.")
+
+    def show_title(self) -> None:
+        print(LINE)
+        print("            나만의 퀴즈 게임")
+        print(LINE)
+
+    def show_menu(self) -> None:
+        print()
+        print(LINE)
+        for number, name in enumerate(self.MENU, start=1):
+            print(f"{number}. {name}")
+        print(LINE)
+
+    def quit(self) -> None:
+        """종료 메시지를 출력한다."""
+        print("\n게임을 종료합니다.")
 
     # ------------------------------------------------------------------
     # 입력 처리
@@ -31,3 +76,18 @@ class QuizGame:
             number = self.parse_number(input(prompt).strip(), min_value, max_value)
             if number is not None:
                 return number
+
+    # ------------------------------------------------------------------
+    # 아직 만들지 않은 메뉴 (준비 중 안내)
+    # ------------------------------------------------------------------
+    def play(self) -> None:
+        print("\n준비 중인 기능입니다.")
+
+    def add_quiz(self) -> None:
+        print("\n준비 중인 기능입니다.")
+
+    def list_quizzes(self) -> None:
+        print("\n준비 중인 기능입니다.")
+
+    def show_score(self) -> None:
+        print("\n준비 중인 기능입니다.")
