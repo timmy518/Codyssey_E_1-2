@@ -5,6 +5,7 @@
 
 import json
 import random
+import shutil
 from datetime import datetime
 from pathlib import Path
 
@@ -284,6 +285,7 @@ class QuizGame:
             # RecursionError 는 괄호가 비정상적으로 깊게 중첩된 파일을 읽을 때 난다.
             self.use_default_quizzes()
             print("데이터 파일이 손상되어 기본 퀴즈 데이터로 복구합니다.")
+            self.backup_corrupted_file()
             self.save_data()
         except OSError:
             self.use_default_quizzes()
@@ -295,6 +297,15 @@ class QuizGame:
             best_text = "없음" if best_score is None else f"{best_score}점"
             print(f"저장된 데이터를 불러왔습니다. (퀴즈 {len(quizzes)}개, 최고점수 {best_text})")
         self.is_loaded = True
+
+    def backup_corrupted_file(self) -> None:
+        """(보충) 손상된 state.json 을 state.json.bak 으로 복사해 둔다. 복구하면서 원래 내용이 사라지지 않게 한다."""
+        backup_path = self.state_path.with_name(self.state_path.name + ".bak")
+        try:
+            shutil.copyfile(self.state_path, backup_path)
+            print(f"손상된 파일은 {backup_path.name} 으로 백업했습니다.")
+        except OSError:
+            print("손상된 파일을 백업하지 못했습니다.")
 
     def use_default_quizzes(self) -> None:
         """기본 퀴즈로 시작한다. (최고 점수와 게임 기록도 초기화)"""

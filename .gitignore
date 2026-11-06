@@ -4,8 +4,9 @@ __pycache__/
 .venv/
 venv/
 
-# 실행하면 생기는 데이터 파일
+# 실행하면 생기는 데이터 파일과 손상 파일 백업
 state.json
+state.json.bak
 
 # OS / 에디터 설정
 .DS_Store
