@@ -19,6 +19,7 @@ Codyssey 입학연수 미션 "컴퓨터에게 명령 내리는 말(파이썬) �
 10. [트러블슈팅](#10-트러블슈팅)
 11. [개념 정리 (과제 목표)](#11-개념-정리-과제-목표)
 12. [Git 작업 기록](#12-git-작업-기록)
+13. [실행 화면](#13-실행-화면)
 
 ---
 
@@ -112,6 +113,7 @@ python -m unittest discover -s tests -v
 │   ├── test_quiz.py
 │   ├── test_quiz_game.py
 │   └── test_main.py
+├── docs/screenshots/    # 실행 화면
 ├── state.json           # 실행하면 생기는 데이터 파일 (.gitignore 로 제외)
 ├── state.json.bak       # (보충) 손상 파일 백업, 손상되었을 때만 생김 (.gitignore 로 제외)
 ├── .gitignore
@@ -263,3 +265,17 @@ python -m unittest discover -s tests -v
 | `feature/bonus` | 힌트, 퀴즈 삭제, 점수 기록 히스토리 | `main` 에 병합 |
 
 병합할 때 `git merge --no-ff` 를 사용해 병합 기록이 `git log --oneline --graph` 에 남도록 했습니다.
+
+## 13. 실행 화면
+
+| 메뉴 | 퀴즈 풀기 |
+| --- | --- |
+| ![메뉴](docs/screenshots/menu.png) | ![퀴즈 풀기](docs/screenshots/play.png) |
+
+| 퀴즈 추가 | 퀴즈 목록 |
+| --- | --- |
+| ![퀴즈 추가](docs/screenshots/add_quiz.png) | ![퀴즈 목록](docs/screenshots/list.png) |
+
+| 점수 확인 |
+| --- |
+| ![점수 확인](docs/screenshots/score.png) |
