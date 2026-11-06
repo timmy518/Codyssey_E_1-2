@@ -3,7 +3,9 @@
 [퀴즈를 바꾸는 방법]
 1. 아래 get_default_quizzes() 안의 Quiz(...) 목록을 원하는 문제로 바꾼다. (5개 이상)
    - choices 에는 선택지 4개, answer 에는 정답 선택지의 번호(1~4)를 적는다.
-2. README.md 의 '퀴즈 주제와 선정 이유'도 함께 고친다.
+2. state.json 을 지우고 다시 실행하면 바꾼 기본 퀴즈로 시작한다.
+   (state.json 이 있으면 저장된 퀴즈를 그대로 불러온다)
+3. README.md 의 '퀴즈 주제와 선정 이유'도 함께 고친다.
 """
 
 from quiz import Quiz
