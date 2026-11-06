@@ -1,12 +1,13 @@
 """퀴즈 게임 전체를 관리하는 QuizGame 클래스.
 
-메뉴 표시와 입력 처리를 담당한다.
+메뉴 표시, 퀴즈 풀기, 입력 처리를 담당한다.
 """
 
 from default_quizzes import get_default_quizzes
 from quiz import Quiz
 
 LINE = "=" * 40
+THIN_LINE = "-" * 40
 
 
 class QuizGame:
@@ -88,11 +89,38 @@ class QuizGame:
                 return number
 
     # ------------------------------------------------------------------
-    # 아직 만들지 않은 메뉴 (준비 중 안내)
+    # 1. 퀴즈 풀기
     # ------------------------------------------------------------------
     def play(self) -> None:
-        print("\n준비 중인 기능입니다.")
+        """퀴즈를 순서대로 출제하고 결과를 보여 준다."""
+        if not self.quizzes:
+            print("\n등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가해 주세요.")
+            return
 
+        total = len(self.quizzes)
+        print(f"\n퀴즈를 시작합니다! (총 {total}문제)")
+        correct_count = 0
+        for number, quiz in enumerate(self.quizzes, start=1):
+            print()
+            print(THIN_LINE)
+            quiz.display(number)
+            print()
+            user_answer = self.ask_number("정답 입력: ", 1, Quiz.CHOICE_COUNT)
+            if quiz.is_correct(user_answer):
+                correct_count += 1
+                print("정답입니다!")
+            else:
+                print("오답입니다.")
+
+        score = int(correct_count * 100 / total)  # 100점 만점, 소수점 아래는 버린다.
+        print()
+        print(LINE)
+        print(f"결과: {total}문제 중 {correct_count}문제 정답! ({score}점)")
+        print(LINE)
+
+    # ------------------------------------------------------------------
+    # 아직 만들지 않은 메뉴 (준비 중 안내)
+    # ------------------------------------------------------------------
     def add_quiz(self) -> None:
         print("\n준비 중인 기능입니다.")
 
