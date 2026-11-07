@@ -182,7 +182,7 @@ python -m unittest discover -s tests -v
 
 | 파일 | 확인하는 것 |
 | --- | --- |
-| `test_quiz.py` | `Quiz` 저장용 변환(`to_dict`/`from_dict`), 잘못된 퀴즈 데이터 거부, 정답 확인, 기본 퀴즈 10개 |
+| `test_quiz.py` | `Quiz` 저장용 변환(`to_dict`/`from_dict`), 잘못된 퀴즈 데이터 거부, 정답 확인, 기본 퀴즈(5개 이상, `Quiz` 인스턴스, 선택지 4개, 정답 1~4, 힌트) |
 | `test_quiz_game.py` | 숫자·글자 입력 검증, 메뉴, 퀴즈 풀기(문제 수 선택, 랜덤, 힌트 점수, 소수점 버림), 최고 점수 갱신, 추가·목록·점수·삭제, 다시 실행 후 데이터 유지, 손상 파일 복구와 백업, 저장 실패 안내, `Ctrl+C`·입력 종료 |
 | `test_main.py` | `main.py` 를 실제로 실행: 입력이 끊겨도 오류 없이 종료, `state.json` 위치, 전체 흐름과 재실행, 손상 파일 백업, Python 버전 확인, 출력에 이모지 없음 |
 
@@ -233,7 +233,7 @@ python -m unittest discover -s tests -v
 
 - **파일 열기·읽기·쓰기** — `with open(경로, "r" 또는 "w", encoding="utf-8") as file:` 로 열고 읽거나 씁니다. `with` 블록이 끝나면 파일이 자동으로 닫힙니다.
 - **JSON** — dict·list 를 사람이 읽을 수 있는 텍스트로 저장하는 형식이라, 퀴즈 목록처럼 구조가 있는 데이터를 저장하고 다시 불러오기 좋습니다. `json.load()` 로 읽고 `json.dump()` 로 씁니다.
-- **try / except** — 오류가 나도 프로그램이 멈추지 않게 처리합니다. 파일 없음(`FileNotFoundError`), JSON 형식 오류(`ValueError`), 항목 없음(`KeyError`)을 잡아 안내 후 기본 퀴즈를 쓰고, `Ctrl+C`(`KeyboardInterrupt`)와 입력 종료(`EOFError`)는 저장 후 종료합니다.
+- **try / except** — 오류가 나도 프로그램이 멈추지 않게 처리합니다. 파일이 없으면(`FileNotFoundError`) 기본 퀴즈로 시작하고, JSON 형식 오류(`ValueError`)나 항목 없음(`KeyError`)은 안내 후 기본 퀴즈로 복구하며, `Ctrl+C`(`KeyboardInterrupt`)와 입력 종료(`EOFError`)는 저장 후 종료합니다.
 
 ### Git 기초
 
@@ -254,8 +254,9 @@ python -m unittest discover -s tests -v
 
 ### 커밋 규칙
 
-- 기능 하나를 완성할 때마다 커밋했습니다. (입력 검증 → 메뉴 → Quiz → 기본 데이터 → 풀기 → 추가 → 목록 → 점수 → 구조 정리 → 저장 → 보너스 → 보충 → 테스트 → README)
+- 커밋은 기능 하나 단위로 나눴습니다. (입력 검증 → 메뉴 → Quiz → 기본 데이터 → 풀기 → 추가 → 목록 → 점수 → 구조 정리 → 저장 → 보너스 → 보충 → 테스트 → README)
 - 커밋 메시지는 `종류: 변경 요약` 형식이고, 본문에 바뀐 내용을 적었습니다. (`Feat` 기능, `Refactor` 구조 개선, `Test` 테스트, `Docs` 문서, `Chore` 설정, `Merge` 브랜치 병합)
+- 이 저장소는 2026-11-06 에 새로 만들면서, 2026-11-04 에 완성한 코드를 위 순서대로 나눠 다시 커밋했습니다. 그래서 초기 설정부터 clone 실습까지의 커밋 시각이 2026-11-06 몇 분 안에 모여 있습니다. 13장 실행 화면의 게임 기록(2026-11-04)과 10-3 의 push 오류는 그 전 저장소에서 작업할 때 있었던 일입니다.
 
 ### 브랜치
 
@@ -269,7 +270,7 @@ python -m unittest discover -s tests -v
 ### clone / pull 실습
 
 1. 이 저장소를 다른 폴더에 `git clone` 했습니다.
-2. 복제한 폴더에서 README 에 아래 한 줄을 추가하고 `commit` → `push` 했습니다.
+2. 복제한 폴더에서 README 에 이 실습 항목(아래 한 줄 포함)을 추가하고 `commit` → `push` 했습니다.
 3. 원래 작업 폴더에서 `git pull` 로 그 변경을 가져와 반영된 것을 확인했습니다.
 
 > 이 문장은 clone 한 폴더에서 추가해 push 한 뒤, 원래 작업 폴더에서 `git pull` 로 받아 온 줄입니다.
