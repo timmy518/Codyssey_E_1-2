@@ -314,7 +314,12 @@ class QuizGame:
         self.history = []
 
     def save_data(self) -> None:
-        """퀴즈 목록, 최고 점수, 게임 기록을 state.json 에 UTF-8 로 저장한다."""
+        """퀴즈 목록, 최고 점수, 게임 기록을 state.json 에 UTF-8 로 저장한다.
+
+        저장할 때마다 전체 데이터를 처음부터 다시 쓴다("w" 모드는 파일을 먼저 비운다).
+        불러올 때(load_data)도 파일 전체를 한 번에 메모리에 올린다.
+        데이터가 많아지면 느려지고 메모리를 많이 쓰므로, 한계와 대안(SQLite, JSON Lines)은 README 7장에 정리했다.
+        """
         data = {
             "quizzes": [quiz.to_dict() for quiz in self.quizzes],
             "best_score": self.best_score,
