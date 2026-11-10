@@ -246,6 +246,33 @@ class DataFileTest(GameTestBase):
         out = run_inputs(game.save_data, [])  # UTF-8 로 쓸 수 없는 글자가 있어도 멈추지 않는다.
         self.assertIn("데이터를 저장하지 못했습니다.", out)
 
+    def test_failed_save_keeps_previous_file(self):
+        # 원자적 저장: 쓰는 도중 실패해도 state.json 은 저장하기 전 그대로이고 임시 파일은 남지 않는다.
+        self.path.with_name("state.json.tmp").write_text("{ 강제 종료로 남은 임시 파일", encoding="utf-8")
+        game = self.loaded_game()
+        run_inputs(game.save_data, [])
+        # 남아 있던 임시 파일도 덮어써 state.json 으로 바뀌므로 state.json 하나만 남는다.
+        self.assertEqual([p.name for p in self.path.parent.iterdir()], ["state.json"])
+        before = self.path.read_bytes()
+        game.quizzes.append(Quiz("\ud83d 깨진 글자", ["a", "b", "c", "d"], 1))  # 이 글자에서 쓰기가 실패한다.
+        out = run_inputs(game.save_data, [])
+        self.assertIn("데이터를 저장하지 못했습니다.", out)
+        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(len(self.saved()["quizzes"]), N)
+        self.assertEqual([p.name for p in self.path.parent.iterdir()], ["state.json"])
+
+    def test_failed_replace_keeps_previous_file(self):
+        # 원자적 저장: 바꿔치기(os.replace)가 실패해도 state.json 은 저장하기 전 그대로이고 임시 파일은 남지 않는다.
+        game = self.loaded_game()
+        run_inputs(game.save_data, [])
+        before = self.path.read_bytes()
+        game.quizzes.pop()
+        with mock.patch("quiz_game.os.replace", side_effect=PermissionError("다른 프로그램이 사용 중")):
+            out = run_inputs(game.save_data, [])
+        self.assertIn("데이터를 저장하지 못했습니다.", out)
+        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual([p.name for p in self.path.parent.iterdir()], ["state.json"])
+
     def test_unreadable_file(self):
         self.path.mkdir()  # state.json 자리에 폴더가 있으면 읽기/쓰기 모두 실패한다.
         out = run_inputs(QuizGame(self.path).run, ["6"])

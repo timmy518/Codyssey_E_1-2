@@ -4,6 +4,7 @@
 """
 
 import json
+import os
 import random
 import shutil
 from datetime import datetime
@@ -316,18 +317,32 @@ class QuizGame:
     def save_data(self) -> None:
         """퀴즈 목록, 최고 점수, 게임 기록을 state.json 에 UTF-8 로 저장한다.
 
-        저장할 때마다 전체 데이터를 처음부터 다시 쓴다("w" 모드는 파일을 먼저 비운다).
+        저장할 때마다 전체 데이터를 처음부터 다시 쓴다.
         불러올 때(load_data)도 파일 전체를 한 번에 메모리에 올린다.
         데이터가 많아지면 느려지고 메모리를 많이 쓰므로, 한계와 대안(SQLite, JSON Lines)은 README 7장에 정리했다.
+
+        (보충) 원자적 저장: 같은 폴더의 임시 파일(state.json.tmp)에 끝까지 쓴 뒤 os.replace() 로
+        state.json 을 한 번에 대체한다. state.json 에 바로 쓰면("w" 모드는 파일을 먼저 비운다) 쓰는 도중
+        오류가 나거나 프로그램이 꺼질 때 파일이 깨진 채 남지만, 이렇게 하면 이전 내용이나 새 내용 중
+        하나가 온전히 남는다.
         """
         data = {
             "quizzes": [quiz.to_dict() for quiz in self.quizzes],
             "best_score": self.best_score,
             "history": self.history,
         }
+        temp_path = self.state_path.with_name(self.state_path.name + ".tmp")
         try:
-            with open(self.state_path, "w", encoding="utf-8") as file:
+            with open(temp_path, "w", encoding="utf-8") as file:
                 json.dump(data, file, ensure_ascii=False, indent=2)
+            # 끝까지 쓴 뒤에만 바꾸므로 일부만 쓰인 state.json 이 남지 않는다.
+            os.replace(temp_path, self.state_path)
         except (OSError, ValueError):
-            # OSError: 권한·디스크 문제, ValueError: UTF-8 로 저장할 수 없는 글자
+            # OSError: 권한·디스크 문제, 다른 프로그램이 state.json 을 열고 있음(Windows)
+            # ValueError: UTF-8 로 저장할 수 없는 글자
+            # 어느 경우든 state.json 은 저장하기 전 그대로 남는다.
             print("데이터를 저장하지 못했습니다.")
+            try:
+                temp_path.unlink(missing_ok=True)  # 남은 임시 파일을 지운다.
+            except OSError:
+                pass  # 지우지 못해도 state.json 은 그대로다.
