@@ -3,6 +3,7 @@
 Codyssey 입학연수 미션 "컴퓨터에게 명령 내리는 말(파이썬) 처음 배우기" 수행 기록입니다. 터미널에서 동작하는 4지선다 퀴즈 게임을 Python으로 만들고, 퀴즈와 점수를 `state.json` 에 저장해 다시 실행해도 유지되게 했습니다. Git으로 기능 단위 커밋, 브랜치 생성·병합, clone·pull 을 기록했습니다.
 
 - 저장소(공개): https://github.com/timmy518/Codyssey_E_1-2
+- Git 기록 요약: `main` 커밋 28개(작업 커밋 25개, 병합 커밋 2개, GitHub 첫 커밋 1개 — 12장 그래프 기준). `feature/play-quiz`·`feature/bonus` 브랜치를 `--no-ff` 로 병합했고(`d519587`, `97cff7b`), 2026-11-06 12:59:31 clone → 12:59:34 clone 한 폴더에서 push → 12:59:48 원래 작업 폴더에서 pull 했습니다. 커밋 그래프·reflog 출력과 캡처는 [12장](#12-git-작업-기록)과 `docs/` 에, 전체 커밋은 [GitHub 커밋 목록](https://github.com/timmy518/Codyssey_E_1-2/commits/main)에 있습니다.
 - 미션 필수 항목과 보너스 과제(선택) 외에 추가로 한 작업은 **(보충)** 으로 표시했습니다.
 
 ## 목차
@@ -213,7 +214,9 @@ Git에서 변경된 파일을 커밋할 대상(스테이징 영역)에 올리는
 │   ├── test_quiz.py
 │   ├── test_quiz_game.py
 │   └── test_main.py
-├── docs/screenshots/    # 실행 화면
+├── docs/
+│   ├── screenshots/     # 실행 화면, Git 기록 캡처
+│   └── git_records.txt  # Git 기록 텍스트 (커밋 그래프, reflog)
 ├── state.json           # 실행하면 생기는 데이터 파일 (.gitignore 로 제외)
 ├── state.json.bak       # (보충) 손상 파일 백업, 손상되었을 때만 생김 (.gitignore 로 제외)
 ├── .gitignore
@@ -438,7 +441,7 @@ load_data()
 - [x] `QuizGame` 클래스 — 퀴즈 목록·최고 점수 속성, 메뉴·풀기·추가·목록·점수·저장/불러오기 메서드
 - [x] `state.json` 저장/불러오기 — 프로젝트 루트, UTF-8, `quizzes`·`best_score` 포함 → [7장](#7-데이터-파일-설명-statejson)
 - [x] README — 개요, 주제 선정 이유, 실행 방법, 기능 목록, 파일 구조, 데이터 파일 설명
-- [x] Git — 의미 있는 커밋 10개 이상, 브랜치 생성·병합(`checkout`, `merge`), `clone`·`pull` 사용 → [12장](#12-git-작업-기록)
+- [x] Git — 의미 있는 커밋 10개 이상, 브랜치 생성·병합(`checkout`, `merge`), `clone`·`pull` 사용 → [12장](#12-git-작업-기록) (커밋 그래프·reflog 출력과 캡처)
 - [x] 보너스 — 랜덤 출제, 문제 수 선택, 힌트, 퀴즈 삭제, 점수 기록 히스토리
 - [x] (보충) Python 버전 확인, 손상 파일 백업, 테스트 코드
 
@@ -558,16 +561,74 @@ Merge: 퀴즈 풀기 기능 병합 (feature/play-quiz)
 - 퀴즈 풀기, 랜덤 출제, 문제 수 선택
 ```
 
+### 커밋 기록
+
+README 에 이 절을 추가하기 직전(`3ccc4bf`)까지 `main` 의 커밋은 28개입니다. GitHub 웹에서 만든 첫 커밋(`Initial commit`) 1개, 작업 커밋 25개(기능·구조 개선·설정·테스트·문서), 병합 커밋 2개이고, 첫 커밋을 빼면 모두 `종류: 변경 요약` 형식입니다. 전체 목록은 [GitHub 커밋 목록](https://github.com/timmy518/Codyssey_E_1-2/commits/main)에서, 이 장의 명령 출력은 텍스트 파일 [docs/git_records.txt](docs/git_records.txt)에서도 볼 수 있습니다.
+
+```text
+$ git log --oneline --graph
+* 3ccc4bf Docs: 평가 항목별 설명 보강 (사용 예시, 설계 이유, 저장 흐름)
+* 09749ed Test: 기본 퀴즈 개수·내용이 바뀌어도 테스트가 통과하도록 수정
+* 9a01657 Docs: JSON 저장 방식의 한계와 수정 지점 체크리스트 추가
+* 9e920f7 Docs: README 설명을 실제 기록에 맞게 수정
+* 3af040b Docs: clone 실습 기록 추가 (README 한 줄)
+* dbb6390 Docs: 실행 화면 스크린샷 추가
+* 84216e6 Docs: README 작성 (개요, 주제 선정 이유, 실행 방법, 기능, 파일 구조, state.json)
+* 133bb0b Test: unittest 테스트 추가 (38개)
+* 6b8d1ce Feat: (보충) 손상된 데이터 파일 백업
+* 9921b08 Feat: (보충) Python 버전 확인 추가
+*   97cff7b Merge: 보너스 기능 병합 (feature/bonus)
+|\
+| * a6c5c75 Feat: 점수 기록 히스토리 저장
+| * e2dc56f Feat: 퀴즈 삭제 기능 추가
+| * a809c05 Feat: 힌트 기능 추가 (힌트 사용 시 해당 문제 점수 절반)
+|/
+* af96370 Feat: state.json 파일 저장/불러오기 구현
+* dbedb2b Refactor: QuizGame 책임 분리 (정답 입력, 결과 처리)
+* 56a62bc Feat: 점수 확인 기능 구현 (최고 점수 비교·갱신)
+* d0b620e Feat: 퀴즈 목록 기능 구현
+* 8a3f3ee Feat: 퀴즈 추가 기능 구현
+*   d519587 Merge: 퀴즈 풀기 기능 병합 (feature/play-quiz)
+|\
+| * 42ae0ae Feat: 랜덤 출제와 문제 수 선택 기능 추가
+| * 2fe33a5 Feat: 퀴즈 풀기 기능 구현
+|/
+* 0309aab Feat: 기본 퀴즈 데이터 작성 (Python & Git 기초 10문제)
+* 904df86 Feat: Quiz 클래스 구현
+* 44c2c4f Feat: 메뉴 화면과 메뉴 선택 기능 구현
+* 8e4fe8a Feat: 입력 검증 메서드 구현
+* e25540b Chore: 프로젝트 초기 설정 (.gitignore, README 초안)
+* ff79bea Initial commit
+```
+
+같은 시점에 터미널에서 실행한 화면입니다.
+
+![git log --oneline --graph](docs/screenshots/git_log_graph.png)
+
 ### 브랜치
 
 퀴즈 풀기와 보너스 기능은 브랜치에서 따로 만들고, 완성된 뒤 `main` 에 병합했습니다. 나머지 커밋은 `main` 에서 바로 했습니다.
 
-| 브랜치 | 작업 내용 | 결과 |
-| --- | --- | --- |
-| `feature/play-quiz` | 퀴즈 풀기, 랜덤 출제, 문제 수 선택 | `main` 에 병합 |
-| `feature/bonus` | 힌트, 퀴즈 삭제, 점수 기록 히스토리 | `main` 에 병합 |
+| 브랜치 | 작업 내용 | 브랜치에서 한 커밋 | `main` 에 병합한 커밋 |
+| --- | --- | --- | --- |
+| `feature/play-quiz` | 퀴즈 풀기, 랜덤 출제, 문제 수 선택 | `2fe33a5`, `42ae0ae` | `d519587` |
+| `feature/bonus` | 힌트, 퀴즈 삭제, 점수 기록 히스토리 | `a809c05`, `e2dc56f`, `a6c5c75` | `97cff7b` |
 
 병합할 때 `git merge --no-ff` 를 사용해 병합 기록이 `git log --oneline --graph` 에 남도록 했습니다. 대신 병합할 때마다 병합 커밋이 하나씩 더 생깁니다. 이번에는 혼자 작업해 로컬에서 바로 병합했고, 여럿이 함께 작업할 때는 같은 흐름에 GitHub 의 Pull Request 와 코드 리뷰를 더해 병합하는 방식으로 넓힐 수 있습니다.
+
+두 브랜치는 GitHub 에도 남아 있습니다([브랜치 목록](https://github.com/timmy518/Codyssey_E_1-2/branches)). 브랜치를 만들고 오간 기록(`checkout`)과 병합 기록(`merge`)은 원래 작업 폴더의 reflog(Git 이 명령을 실행할 때 시각과 함께 자동으로 남기는 기록)에 있습니다(최근 것이 위, 캡처는 아래 'clone / pull 실습').
+
+```text
+$ git reflog --date=iso --grep-reflog=checkout --grep-reflog=merge --grep-reflog=pull
+3af040b HEAD@{2026-11-06 12:59:48 +0900}: pull: Fast-forward
+97cff7b HEAD@{2026-11-06 12:58:48 +0900}: merge feature/bonus: Merge made by the 'ort' strategy.
+af96370 HEAD@{2026-11-06 12:58:48 +0900}: checkout: moving from feature/bonus to main
+af96370 HEAD@{2026-11-06 12:58:47 +0900}: checkout: moving from main to feature/bonus
+d519587 HEAD@{2026-11-06 12:57:44 +0900}: merge feature/play-quiz: Merge made by the 'ort' strategy.
+0309aab HEAD@{2026-11-06 12:57:44 +0900}: checkout: moving from feature/play-quiz to main
+0309aab HEAD@{2026-11-06 12:57:43 +0900}: checkout: moving from main to feature/play-quiz
+ff79bea HEAD@{2026-11-06 12:57:32 +0900}: initial pull
+```
 
 두 번의 병합 모두 충돌 없이 끝났습니다. 충돌이 나면 다음 순서로 처리합니다.
 
@@ -583,6 +644,40 @@ Merge: 퀴즈 풀기 기능 병합 (feature/play-quiz)
 3. 원래 작업 폴더에서 `git pull` 로 그 변경을 가져와 반영된 것을 확인했습니다.
 
 > 이 문장은 clone 한 폴더에서 추가해 push 한 뒤, 원래 작업 폴더에서 `git pull` 로 받아 온 줄입니다.
+
+Git 이 남긴 실행 기록입니다(reflog, 최근 것이 위). clone 한 폴더는 `dbb6390` 에서 시작해 `3af040b`(README 에 이 실습 항목 추가)를 만들어 push 했고, 원래 작업 폴더는 pull 로 `dbb6390` 에서 `3af040b` 로 Fast-forward 되었습니다.
+
+```text
+# clone 한 폴더 (E_1-2\clone-practice\Codyssey_E_1-2)
+$ git reflog --date=iso
+3af040b HEAD@{2026-11-06 12:59:32 +0900}: commit: Docs: clone 실습 기록 추가 (README 한 줄)
+dbb6390 HEAD@{2026-11-06 12:59:31 +0900}: clone: from https://github.com/timmy518/Codyssey_E_1-2.git
+$ git reflog show --date=iso origin/main
+3af040b refs/remotes/origin/main@{2026-11-06 12:59:34 +0900}: update by push
+
+# 원래 작업 폴더 (E_1-2\Codyssey_E_1-2)
+$ git reflog --date=iso --grep-reflog=pull
+3af040b HEAD@{2026-11-06 12:59:48 +0900}: pull: Fast-forward
+ff79bea HEAD@{2026-11-06 12:57:32 +0900}: initial pull
+```
+
+아래는 2026-11-10 에 터미널에서 다시 조회한 화면입니다. 위쪽은 원래 작업 폴더에서 위 '브랜치'의 reflog 명령을, 아래쪽은 clone 한 폴더에서 위 두 명령을 실행한 결과입니다.
+
+![git reflog: checkout, merge, clone, push, pull](docs/screenshots/git_reflog.png)
+
+### Git 명령 사용 기록
+
+미션에서 요구한 Git 기초 명령 7가지(`init`, `add`, `commit`, `push`, `pull`, `checkout`, `clone`)를 모두 썼고, 병합에 쓴 `merge` 와 함께 아래 기록으로 확인할 수 있습니다.
+
+| 명령 | 쓴 때 | 남은 기록 |
+| --- | --- | --- |
+| `git init` | 작업 폴더를 처음 만들 때 | `git init` 으로 만든 빈 저장소에 `git remote add origin` 을 하고 `git pull origin main` 으로 GitHub 의 첫 커밋을 받음 (reflog 맨 아래 `initial pull`) |
+| `git add`, `git commit` | 기능 하나 단위로 나눠 커밋할 때 (위 '커밋 규칙') | 위 '커밋 기록' |
+| `git checkout` | 브랜치를 만들고(`-b`) `main` 과 오갈 때 | reflog 의 `checkout: moving from ...` 4줄 |
+| `git merge` | 브랜치를 `main` 에 합칠 때 (`--no-ff`) | 병합 커밋 `d519587`, `97cff7b` |
+| `git push` | GitHub 에 올릴 때 | GitHub 의 커밋·브랜치, `origin/main` reflog 의 `update by push` (`docs/git_records.txt`) |
+| `git clone` | clone 실습 | clone 한 폴더의 reflog `clone: from https://github.com/timmy518/Codyssey_E_1-2.git` |
+| `git pull` | 처음 받을 때, clone 실습 마지막 | reflog 의 `initial pull`, `pull: Fast-forward` |
 
 ## 13. 실행 화면
 

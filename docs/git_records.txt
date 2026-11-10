@@ -1,0 +1,64 @@
+Codyssey_E_1-2 Git 기록 (README 12장과 같은 명령의 출력)
+만든 시점: 2026-11-10, 커밋 3ccc4bf (README 에 이 기록을 추가하기 직전)
+
+[원래 작업 폴더: E_1-2\Codyssey_E_1-2]
+
+$ git log --oneline --graph
+* 3ccc4bf Docs: 평가 항목별 설명 보강 (사용 예시, 설계 이유, 저장 흐름)
+* 09749ed Test: 기본 퀴즈 개수·내용이 바뀌어도 테스트가 통과하도록 수정
+* 9a01657 Docs: JSON 저장 방식의 한계와 수정 지점 체크리스트 추가
+* 9e920f7 Docs: README 설명을 실제 기록에 맞게 수정
+* 3af040b Docs: clone 실습 기록 추가 (README 한 줄)
+* dbb6390 Docs: 실행 화면 스크린샷 추가
+* 84216e6 Docs: README 작성 (개요, 주제 선정 이유, 실행 방법, 기능, 파일 구조, state.json)
+* 133bb0b Test: unittest 테스트 추가 (38개)
+* 6b8d1ce Feat: (보충) 손상된 데이터 파일 백업
+* 9921b08 Feat: (보충) Python 버전 확인 추가
+*   97cff7b Merge: 보너스 기능 병합 (feature/bonus)
+|\
+| * a6c5c75 Feat: 점수 기록 히스토리 저장
+| * e2dc56f Feat: 퀴즈 삭제 기능 추가
+| * a809c05 Feat: 힌트 기능 추가 (힌트 사용 시 해당 문제 점수 절반)
+|/
+* af96370 Feat: state.json 파일 저장/불러오기 구현
+* dbedb2b Refactor: QuizGame 책임 분리 (정답 입력, 결과 처리)
+* 56a62bc Feat: 점수 확인 기능 구현 (최고 점수 비교·갱신)
+* d0b620e Feat: 퀴즈 목록 기능 구현
+* 8a3f3ee Feat: 퀴즈 추가 기능 구현
+*   d519587 Merge: 퀴즈 풀기 기능 병합 (feature/play-quiz)
+|\
+| * 42ae0ae Feat: 랜덤 출제와 문제 수 선택 기능 추가
+| * 2fe33a5 Feat: 퀴즈 풀기 기능 구현
+|/
+* 0309aab Feat: 기본 퀴즈 데이터 작성 (Python & Git 기초 10문제)
+* 904df86 Feat: Quiz 클래스 구현
+* 44c2c4f Feat: 메뉴 화면과 메뉴 선택 기능 구현
+* 8e4fe8a Feat: 입력 검증 메서드 구현
+* e25540b Chore: 프로젝트 초기 설정 (.gitignore, README 초안)
+* ff79bea Initial commit
+
+$ git reflog --date=iso --grep-reflog=checkout --grep-reflog=merge --grep-reflog=pull
+3af040b HEAD@{2026-11-06 12:59:48 +0900}: pull: Fast-forward
+97cff7b HEAD@{2026-11-06 12:58:48 +0900}: merge feature/bonus: Merge made by the 'ort' strategy.
+af96370 HEAD@{2026-11-06 12:58:48 +0900}: checkout: moving from feature/bonus to main
+af96370 HEAD@{2026-11-06 12:58:47 +0900}: checkout: moving from main to feature/bonus
+d519587 HEAD@{2026-11-06 12:57:44 +0900}: merge feature/play-quiz: Merge made by the 'ort' strategy.
+0309aab HEAD@{2026-11-06 12:57:44 +0900}: checkout: moving from feature/play-quiz to main
+0309aab HEAD@{2026-11-06 12:57:43 +0900}: checkout: moving from main to feature/play-quiz
+ff79bea HEAD@{2026-11-06 12:57:32 +0900}: initial pull
+
+$ git reflog show --date=iso origin/main
+9a01657 refs/remotes/origin/main@{2026-11-10 18:47:15 +0900}: update by push
+9e920f7 refs/remotes/origin/main@{2026-11-07 19:30:17 +0900}: update by push
+3af040b refs/remotes/origin/main@{2026-11-06 12:59:48 +0900}: pull: fast-forward
+dbb6390 refs/remotes/origin/main@{2026-11-06 12:59:17 +0900}: update by push
+ff79bea refs/remotes/origin/main@{2026-11-06 12:57:32 +0900}: pull origin main: storing head
+
+[clone 한 폴더: E_1-2\clone-practice\Codyssey_E_1-2]
+
+$ git reflog --date=iso
+3af040b HEAD@{2026-11-06 12:59:32 +0900}: commit: Docs: clone 실습 기록 추가 (README 한 줄)
+dbb6390 HEAD@{2026-11-06 12:59:31 +0900}: clone: from https://github.com/timmy518/Codyssey_E_1-2.git
+
+$ git reflog show --date=iso origin/main
+3af040b refs/remotes/origin/main@{2026-11-06 12:59:34 +0900}: update by push
