@@ -10,6 +10,11 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_FILES = ["main.py", "quiz.py", "quiz_game.py", "default_quizzes.py"]
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from default_quizzes import get_default_quizzes  # noqa: E402
+
+N = len(get_default_quizzes())  # 기본 퀴즈 수. 퀴즈를 바꿔도 기대값이 맞도록 직접 센다.
 
 
 def find_emoji(text):
@@ -47,12 +52,12 @@ class MainProcessTest(unittest.TestCase):
         self.assertFalse((self.project.parent / "state.json").exists())
 
     def test_full_session_and_restart(self):
-        first = self.run_main("abc\n2\n재시작 문제?\n가\n나\n다\n라\n2\n힌트\n3\n1\n3\nh\n1\nh\n1\nh\n1\n4\n5\n11\n6\n")
+        first = self.run_main(f"abc\n2\n재시작 문제?\n가\n나\n다\n라\n2\n힌트\n3\n1\n3\nh\n1\nh\n1\nh\n1\n4\n5\n{N + 1}\n6\n")
         self.assertEqual(first.returncode, 0, first.stderr)
         self.assertIn("결과: 3문제 중", first.stdout)
         self.assertIn("퀴즈를 삭제했습니다: 재시작 문제?", first.stdout)
         second = self.run_main("3\n4\n6\n")
-        self.assertIn("저장된 데이터를 불러왔습니다. (퀴즈 10개, 최고점수 ", second.stdout)
+        self.assertIn(f"저장된 데이터를 불러왔습니다. (퀴즈 {N}개, 최고점수 ", second.stdout)
         self.assertIn("게임 기록 (총 1회)", second.stdout)
         self.assertEqual(find_emoji(first.stdout + second.stdout), [])
 

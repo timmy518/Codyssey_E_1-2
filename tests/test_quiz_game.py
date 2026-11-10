@@ -168,7 +168,7 @@ class AddListScoreDeleteTest(GameTestBase):
     def test_list(self):
         out = run_inputs(self.loaded_game().list_quizzes, [])
         self.assertIn(f"등록된 퀴즈 목록 (총 {N}개)", out)
-        self.assertIn("[1] Python에서", out)
+        self.assertIn(f"[1] {get_default_quizzes()[0].question}", out)
         self.assertIn("등록된 퀴즈가 없습니다", run_inputs(self.loaded_game(quizzes=[]).list_quizzes, []))
 
     def test_score(self):
